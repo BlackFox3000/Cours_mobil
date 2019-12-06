@@ -14,18 +14,25 @@ export default (app) => {
         }
     })
 
-    app.get('/product/:bar_code', async (req, res)=>{
+    app.get('/product/:bar_code', async (req,res) => {
         const barCode = req.params.bar_code;
-        try{
-            const product = await productModel.findOne()
-            res.status(200).json(product)
-        }catch (err) {
-            console.log(err.message)
+        try {
+            const product = await productModel.findOne({bar_code: barCode});
+            if (product)
+                res.status(200).json(product);
+            else {
+                res.status(404).json({
+                    'error': true,
+                    'message': `No product with barcode ${barCode} found ..`
+                })
+            }
+        } catch (err){
+            console.log(err.message);
             return res.status(500).json({
-                'error':true,
-                'message':'Error resquesting produc ${barCode}'
+                'error': true,
+                'message': `Error resquesting product ${barCode} !`
             })
         }
     })
-
 }
+
