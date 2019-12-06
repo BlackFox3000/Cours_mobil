@@ -1,12 +1,14 @@
 import express from 'express'
+import routes from './routes'
+import InitDb from './db'
 
-export default () =>{
+export default() =>{
     try {
         const app = express();
-        const port = 3000;
-
-        app.listen(port, ()=>{
-            console.log('un truc')
+        InitDb();
+        routes(app)
+        app.listen(process.env.PORT, ()=>{
+            console.log(process.env.PORT, process.env.NODE_ENV)
         })
     }catch (e) {
         console.error(e);
